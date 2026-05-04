@@ -19,7 +19,7 @@ Many teams need rate limits that are:
 |------|----------------|
 | **Algorithm** | Fixed-window counters per `(bucket, clientKey)`; predictable reset at window boundary. |
 | **Identity** | Default: named cookie → optional explicit `Client.ID` → IP (with `X-Forwarded-For` / `X-Real-IP` / `RemoteAddr` parsing). Fully replaceable resolver. |
-| **HTTP integration** | Plain `*http.Request` via `AllowHTTPRequest` + response helpers; built-in `net/http` middleware; optional **Gin**, **Echo**, **Fiber**, **gorilla/mux**. |
+| **HTTP integration** | Plain `*http.Request` via `AllowHTTPRequest` + response helpers; built-in `net/http` middleware; optional **Gin**, **Echo**, **Fiber**, **gorilla/mux**, **fasthttp**. |
 | **Service layer** | `Limiter.AllowClient` / `AllowHTTPRequest` for non-middleware use; inject the same `*Limiter` everywhere. |
 | **Per-bucket limits** | `defaultLimit` + `map[string]Limit` for route names, paths, or arbitrary keys. |
 | **In-memory** | `MemoryStore` with a **background cleaner** to drop expired or idle keys and bound memory. |
@@ -144,6 +144,83 @@ Each adapter wraps `Limiter.AllowHTTPRequest` and sets rate-limit headers; on de
 - **Echo**: `.../adapters/echo` → `echoadapter.Middleware(limiter)`
 - **Fiber**: `.../adapters/fiber` → `fiberadapter.Middleware(limiter)` (builds an `*http.Request` for the limiter)
 - **gorilla/mux**: `.../adapters/mux` → `muxadapter.Middleware(limiter)`
+- **FastHTTP**: `.../adapters/fasthttp` → `fasthttpadapter.Middleware(limiter, next)`
+
+### Middleware examples for each library
+
+#### net/http
+
+```go
+store := stores.NewMemoryStore(time.Minute, 5*time.Minute)
+defer store.Close()
+
+limiter, err := rlim.New(store, rlim.Limit{Requests: 100, Window: time.Minute}, nil)
+if err != nil {
+    log.Fatal(err)
+}
+
+mux := http.NewServeMux()
+mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+    _, _ = w.Write([]byte("ok"))
+})
+
+handler := limiter.Middleware(mux)
+log.Fatal(http.ListenAndServe(":8080", handler))
+```
+
+#### Gin
+
+```go
+r := gin.New()
+r.Use(ginadapter.Middleware(limiter))
+r.GET("/hello", func(c *gin.Context) {
+    c.JSON(200, gin.H{"ok": true})
+})
+_ = r.Run(":8080")
+```
+
+#### Echo
+
+```go
+e := echo.New()
+e.Use(echoadapter.Middleware(limiter))
+e.GET("/hello", func(c echo.Context) error {
+    return c.JSON(200, map[string]bool{"ok": true})
+})
+_ = e.Start(":8080")
+```
+
+#### Fiber
+
+```go
+app := fiber.New()
+app.Use(fiberadapter.Middleware(limiter))
+app.Get("/hello", func(c *fiber.Ctx) error {
+    return c.JSON(fiber.Map{"ok": true})
+})
+_ = app.Listen(":8080")
+```
+
+#### gorilla/mux
+
+```go
+r := mux.NewRouter()
+r.Use(muxadapter.Middleware(limiter))
+r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+    _, _ = w.Write([]byte("ok"))
+})
+log.Fatal(http.ListenAndServe(":8080", r))
+```
+
+#### FastHTTP
+
+```go
+handler := fasthttpadapter.Middleware(limiter, func(ctx *fasthttp.RequestCtx) {
+    ctx.SetStatusCode(200)
+    _, _ = ctx.WriteString("ok")
+})
+log.Fatal(fasthttp.ListenAndServe(":8080", handler))
+```
 
 ## Stores
 
