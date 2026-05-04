@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rykovm/go-rlim"
-	"github.com/rykovm/go-rlim/stores"
+	"github.com/overiss/go-rlim"
+	"github.com/overiss/go-rlim/stores"
 )
 
 // TestCustomHTTPMiddlewarePattern verifies AllowHTTPRequest plus public write helpers

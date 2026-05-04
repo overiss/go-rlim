@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/rykovm/go-rlim"
+	"github.com/overiss/go-rlim"
 )
 
 // Middleware returns a fiber.Handler that applies l before c.Next().

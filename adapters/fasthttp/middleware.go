@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/rykovm/go-rlim"
+	"github.com/overiss/go-rlim"
 	"github.com/valyala/fasthttp"
 )
 

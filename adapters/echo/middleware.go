@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/rykovm/go-rlim"
+	"github.com/overiss/go-rlim"
 )
 
 // Middleware returns echo.MiddlewareFunc that runs the limiter before the next handler.

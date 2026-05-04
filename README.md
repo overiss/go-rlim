@@ -36,14 +36,14 @@ Many teams need rate limits that are:
 ## Installation
 
 ```bash
-go get github.com/rykovm/go-rlim
+go get github.com/overiss/go-rlim
 ```
 
 Subpackages (optional adapters / stores):
 
 ```bash
-go get github.com/rykovm/go-rlim/stores
-go get github.com/rykovm/go-rlim/adapters/gin
+go get github.com/overiss/go-rlim/stores
+go get github.com/overiss/go-rlim/adapters/gin
 # … echo, fiber, mux as needed
 ```
 
@@ -140,7 +140,7 @@ func withRateLimit(l *rlim.Limiter, next http.Handler) http.Handler {
 
 Each adapter wraps `Limiter.AllowHTTPRequest` and sets rate-limit headers; on deny it returns **429** (and JSON where the framework typically uses JSON).
 
-- **Gin**: `github.com/rykovm/go-rlim/adapters/gin` → `ginadapter.Middleware(limiter)`
+- **Gin**: `github.com/overiss/go-rlim/adapters/gin` → `ginadapter.Middleware(limiter)`
 - **Echo**: `.../adapters/echo` → `echoadapter.Middleware(limiter)`
 - **Fiber**: `.../adapters/fiber` → `fiberadapter.Middleware(limiter)` (builds an `*http.Request` for the limiter)
 - **gorilla/mux**: `.../adapters/mux` → `muxadapter.Middleware(limiter)`
@@ -269,8 +269,8 @@ store := stores.NewEtcdStore(cli, "rlim/")
 Full **Go doc** comments are on every exported symbol and on internal helpers in the repository. From the module root:
 
 ```bash
-go doc -all github.com/rykovm/go-rlim
-go doc -all github.com/rykovm/go-rlim/stores
+go doc -all github.com/overiss/go-rlim
+go doc -all github.com/overiss/go-rlim/stores
 ```
 
 ## Limitations (by design)

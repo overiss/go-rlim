@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/rykovm/go-rlim"
+	"github.com/overiss/go-rlim"
 )
 
 // Middleware returns mux.MiddlewareFunc compatible with router.Use.

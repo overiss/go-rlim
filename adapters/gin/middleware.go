@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rykovm/go-rlim"
+	"github.com/overiss/go-rlim"
 )
 
 // Middleware returns a gin.HandlerFunc that enforces limits using l before c.Next().

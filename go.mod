@@ -1,6 +1,6 @@
-module github.com/rykovm/go-rlim
+module github.com/overiss/go-rlim
 
-go 1.22
+go 1.26
 
 require (
 	github.com/gin-gonic/gin v1.10.0
@@ -8,6 +8,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/redis/go-redis/v9 v9.6.1
+	github.com/valyala/fasthttp v1.51.0
 	go.etcd.io/etcd/client/v3 v3.5.15
 )
 
@@ -45,7 +46,6 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.15 // indirect
